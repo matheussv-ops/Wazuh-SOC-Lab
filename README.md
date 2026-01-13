@@ -53,15 +53,22 @@ The SIEM triggered alerts for suspicious activity on the 'My-Windows' endpoint. 
 ![Threat Detection Dashboard](img/phase9.png)
 
 ## Phase 9: Deep Log Analysis and Forensic Investigation
-I analyzed the raw event data to understand the nature of the security breach. The investigation revealed **Event ID 4625** (Failed Logon) with **Logon Type 3** (Network-based), providing granular evidence of unauthorized credential testing.
+Moving from general detection to digital forensics, I analyzed the raw event data to understand the nature of the security breach. This granular view allows for a precise identification of the threat actor's tactics.
+
+**Technical Forensic Evidence:**
+* **Targeted Identity:** The log identifies a logon attempt using the username **'usuario_falso'**, confirming an unauthorized credential testing activity.
+* **Windows Event Correlation:** The system successfully captured **Event ID 4625**, the standard Windows telemetry for failed logon attempts.
+* **Logon Type Analysis:** The record shows **Logon Type 3**, indicating a remote network-based attempt rather than a local physical access, which is consistent with external scanning or brute-force patterns.
+* **Error Code Diagnostics:** The failure status **0xc000006d** specifically points to an invalid username or authentication process failure, providing the necessary evidence to initiate an incident response protocol.
 
 ![Forensic Log Details](img/phase10.png)
 
 ## Phase 10: Incident Response and Remediation
-Following the detection, I implemented a structured **Incident Response** protocol:
-* **IP Blocking:** Simulated an IP block via Windows Firewall to prevent further attempts.
-* **Account Hardening:** Reviewed the **Account Lockout Policy** to ensure accounts are disabled after 5 failed attempts.
+Following the detection of the brute-force attempt (Event ID 4625), I implemented a structured **Incident Response** protocol to mitigate the risk and harden the endpoint:
+* **IP Blocking:** Identified the source of the unauthorized attempts and simulated an IP block via the host-based firewall (Windows Firewall) to prevent further connection attempts.
+* **Account Hardening:** Verified that the targeted username ('usuario_falso') did not exist. As a preventive measure, I reviewed the **Account Lockout Policy** to ensure accounts are automatically disabled after 5 failed attempts.
 * **Service Review:** Audited RDP/SMB settings to ensure remote access is restricted to authorized users only.
+* **Active Response:** Evaluated the feasibility of enabling Wazuh’s Active Response module for automated threat mitigation.
 
 ## Phase 11: Conclusion and Key Takeaways
 The deployment of this Cybersecurity Home Lab provided a comprehensive view of the **Detection and Response** lifecycle. This project solidifies my foundation as a **Junior SOC Analyst**, demonstrating the technical maturity required to monitor, detect, and respond to modern cyber threats in an enterprise environment.
