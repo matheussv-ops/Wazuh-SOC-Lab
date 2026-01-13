@@ -6,67 +6,57 @@ This project demonstrates the end-to-end deployment of a **Wazuh SIEM/XDR** ecos
 ---
 
 ## Phase 1: Operating System Deployment
-To host the Wazuh SIEM, I deployed an **Ubuntu Server 24.04 LTS** instance. This environment was configured with 8GB of RAM and 50GB of storage to ensure high performance during log analysis. The network was set to **Bridge Mode** to allow seamless communication between the server and monitored endpoints.
+[cite_start]To host the Wazuh SIEM, I deployed an **Ubuntu Server 24.04 LTS** instance[cite: 1, 2]. [cite_start]This environment was configured with 8GB of RAM and 50GB of storage to ensure high performance during log analysis[cite: 3]. [cite_start]The network was set to **Bridge Mode** to allow seamless communication between the server and monitored endpoints[cite: 4].
 
 ![OS Deployment](img/phase1.png)
 
 ## Phase 2: Establishing Secure Remote Management (SSH)
-To streamline the deployment and management of the Wazuh server, I established a remote connection from my Windows host to the Ubuntu VM using the **SSH protocol via PowerShell**. This setup confirms network reachability between the host and the guest and allows for more efficient command execution and system monitoring.
-* **Tool:** Windows Terminal / PowerShell (SSH Client)
-* **Target:** matheus-soc@192.168.0.22
-* **Port:** 22 (Default SSH)
+[cite_start]To streamline the deployment and management of the Wazuh server, I established a remote connection from my Windows host to the Ubuntu VM using the **SSH protocol via PowerShell**[cite: 5, 6]. [cite_start]This setup confirms network reachability and allows for more efficient command execution[cite: 7, 8].
+* [cite_start]**Target:** matheus-soc@192.168.0.22 [cite: 9]
+* [cite_start]**Port:** 22 (Default SSH) [cite: 10]
 
 ![SSH Connection](img/phase2.png)
 
-## Phase 3: Automated Deployment & Service Validation
-Following the successful validation of the Ubuntu Server environment, I initiated the deployment of the **Wazuh ecosystem (v4.9.2)**. The centralized installation assistant was utilized via a remote SSH connection to ensure precision and system integrity.
+## Phase 3: Automated Deployment of Wazuh SIEM/XDR
+[cite_start]Following the validation of the Ubuntu environment, I initiated the deployment of the **Wazuh ecosystem (v4.9.2)**[cite: 11, 12]. [cite_start]The installation script performed automated checks for hardware requirements (CPU/RAM) and generated the necessary security certificates for encrypted communication[cite: 15, 16, 17].
 
-**Key technical milestones:**
-* **Hardware Resource Validation:** The script verified that the VM resources met the requirements for real-time log indexing.
-* **Security Architecture & Encryption:** Automated generation of a Root Certificate Authority (CA) and specific node certificates to ensure all internal traffic is fully encrypted.
-* **Component Provisioning:** Successful initialization of the Wazuh Indexer, Manager (vulnerability engine), Filebeat, and Dashboard.
+![Automated Installation](img/phase3.png)
 
-![Wazuh Installation](img/phase3.png)
+## Phase 4: Successful Provisioning and Service Validation
+[cite_start]The automated installation script concluded successfully, marking the completion of the SIEM server infrastructure[cite: 21, 22]. [cite_start]All core components, including the **Wazuh Indexer, Manager, and Dashboard**, were provisioned and initialized without errors[cite: 23, 25, 26, 28].
 
-## Phase 4: Web Interface Integration and Initial Telemetry
-After successful provisioning, I accessed the **Wazuh Dashboard** via HTTPS using the server's local IP (192.168.0.22). This stage confirms the proper integration between the Indexer and the Dashboard UI. Upon initial login, the system already recorded **21 security events** related to internal server processes and integrity checks.
+![Service Validation](img/phase4.png)
 
-![Dashboard Access](img/phase4.png)
+## Phase 5: Web Interface Integration and Initial Telemetry
+[cite_start]I accessed the **Wazuh Dashboard** via HTTPS using the server's local IP (192.168.0.22)[cite: 30, 31]. [cite_start]This stage confirmed the proper integration between the Indexer and the Dashboard UI[cite: 32]. [cite_start]Upon initial login, the system already recorded **21 security events** related to internal server processes[cite: 35].
 
-## Phase 5: Agent Enrollment and Endpoint Deployment
-To begin active monitoring, I initiated the agent enrollment process. I selected the **Windows MSI** package for the local host and assigned the server address `192.168.0.22`. The agent was customized with the name **'My-Windows'** for clear identification within the security group.
+![Dashboard Overview](img/phase5.png)
 
-![Agent Configuration](img/phase5.png)
+## Phase 6: Agent Enrollment Configuration
+[cite_start]To begin active monitoring, I initiated the agent enrollment process through the Wazuh Dashboard[cite: 37, 38]. [cite_start]I configured a **Windows MSI** package for the local host, assigning the server address and naming the agent **'My-Windows'**[cite: 41, 42, 43].
 
-## Phase 6: Successful Agent Synchronization and Visibility
-This stage marks the establishment of active monitoring. The Wazuh Manager is now receiving real-time telemetry from the deployed endpoint. The system successfully retrieved detailed OS metadata, identifying the host as **Windows 11 Pro**, with a 100% connectivity rate.
+![Agent Enrollment](img/phase6.png)
 
-![Active Agent Visibility](img/phase6.png)
+## Phase 7: Successful Agent Synchronization and Visibility
+[cite_start]This stage marks the successful establishment of active monitoring[cite: 45, 46]. [cite_start]The Wazuh Manager is now receiving real-time telemetry from the Windows 11 Pro endpoint, confirming that the communication channel is secure and operational[cite: 48, 49].
 
-## Phase 7: Threat Detection and Event Correlation Analysis
-The SIEM triggered alerts for suspicious activity on the 'My-Windows' endpoint. The dashboard recorded **3 Authentication Failure** events, which were automatically correlated with the **MITRE ATT&CK Framework** (Tactic: Account Access), providing immediate context for incident response.
+![Active Agent Status](img/phase7.png)
 
-![Threat Detection Dashboard](img/phase7.png)
+## Phase 8: Threat Detection and Event Correlation Analysis
+[cite_start]The SIEM successfully triggered alerts for suspicious activity on the 'My-Windows' endpoint[cite: 52, 54]. [cite_start]The dashboard recorded **3 Authentication Failure** events, which were automatically mapped to the **MITRE ATT&CK** framework (Account Access)[cite: 56, 57].
 
-## Phase 8: Deep Log Analysis and Forensic Investigation
-Moving into digital forensics, I analyzed the raw event data. The investigation revealed **Event ID 4625** (Failed Logon) with **Logon Type 3** (Network-based). The failure status **0xc000006d** specifically points to an invalid username ('usuario_falso') or authentication process failure.
+![Threat Detection](img/phase9.png)
 
-![Forensic Analysis](img/phase8.png)
+## Phase 9: Deep Log Analysis and Forensic Investigation
+[cite_start]I analyzed the raw event data to understand the nature of the security breach[cite: 60, 61]. [cite_start]The investigation revealed **Event ID 4625** (Failed Logon) with **Logon Type 3** (Network-based), providing granular evidence of unauthorized credential testing[cite: 65, 66, 67].
 
-## Phase 9: Incident Response and Remediation
-Following the detection, I implemented a structured **Incident Response** protocol:
-* **IP Blocking:** Identified and simulated an IP block via Windows Firewall to prevent further attempts.
-* **Account Hardening:** Reviewed the **Account Lockout Policy** to ensure accounts are disabled after 5 failed attempts.
-* **Service Review:** Audited RDP/SMB settings to ensure remote access is restricted to authorized users via VPN or MFA.
-* **Active Response:** Evaluated the feasibility of enabling Wazuh’s Active Response module for automated threat mitigation.
+![Forensic Log Details](img/phase10.png)
 
----
+## Phase 10: Incident Response and Remediation
+[cite_start]Following the detection of the brute-force attempt, I implemented a structured **Incident Response** protocol[cite: 68, 69]:
+* [cite_start]**IP Blocking:** Simulated an IP block via Windows Firewall to prevent further connection attempts[cite: 71].
+* [cite_start]**Account Hardening:** Reviewed the **Account Lockout Policy** to ensure accounts are automatically disabled after 5 failed attempts[cite: 73].
+* [cite_start]**Service Review:** Audited RDP/SMB settings to ensure remote access is restricted to authorized users only[cite: 74].
 
-## Phase 10: Conclusion and Key Takeaways
-The deployment of this Cybersecurity Home Lab provided a comprehensive view of the **Detection and Response lifecycle**. By integrating an Ubuntu-based Wazuh Manager with a Windows 11 endpoint, I established a robust environment for threat hunting.
-
-**Professional Competencies Demonstrated:**
-* **Infrastructure Management:** Deployment of Linux-based security servers and remote SSH management.
-* **SIEM/XDR Proficiency:** Experience in log ingestion, rule correlation, and dashboard customization.
-* **Analytic Mindset:** Ability to interpret raw Windows Event Logs (XML/JSON) and map them to the MITRE ATT&CK framework.
-* **Technical Reporting:** Documenting complex security processes for technical and executive audiences.
+## Phase 11: Conclusion and Key Takeaways
+[cite_start]The successful deployment of this Cybersecurity Home Lab provided a comprehensive view of the **Detection and Response** lifecycle[cite: 76, 77]. [cite_start]This project solidifies my foundation as a **Junior SOC Analyst**, demonstrating the technical maturity required to monitor, detect, and respond to modern cyber threats in an enterprise environment[cite: 84].
